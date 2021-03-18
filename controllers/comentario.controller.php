@@ -20,6 +20,16 @@ class ComentarioController {
       exit(json_encode($resultado));
     
   }
+  
+  public function listarComentariosPorJuego($id) {
+    
+      $eval = "SELECT * FROM comentario where idJuego=?";
+      $peticion = $this->db->prepare($eval);
+      $peticion->execute([$id]);
+      $resultado = $peticion->fetchAll(PDO::FETCH_OBJ);
+      exit(json_encode($resultado));
+    
+  }
 
   public function verJuego($id) {
       $consulta = "SELECT * FROM juego WHERE id=?";

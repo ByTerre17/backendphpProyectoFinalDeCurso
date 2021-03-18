@@ -117,6 +117,10 @@ switch($control[0]) {
           case "list":
             $controladorComentarios->listarComentarios();
             break;
+        
+          case "listPorJuego":
+            $controladorComentarios->listarComentariosPorJuego($control[2]);
+            break;
           case "ver":
             $controladorJuegos->verJuego($control[2]);
             break;
