@@ -310,4 +310,33 @@ class UserController {
         exit(json_encode(["Mensaje enviado"]));
     }
   }
+  
+  public function editarPassword() {
+    if(IDUSER) {
+      //Cogemos los valores de la peticion.
+      $user = json_decode(file_get_contents("php://input"));
+      
+      if(!isset($user->passwordAntigua) || !isset($user->passwordNueva)) {
+      http_response_code(400);
+      exit(json_encode($user));
+    }
+
+      //Obtenemos los datos guardados en el servidor relacionados con el usuario
+      $peticion = $this->db->prepare("SELECT email,foto,usuario,password,rol FROM usuario WHERE id=?");
+      $peticion->execute([IDUSER]);
+      $usuarioBaseDeDatos = $peticion->fetchObject();
+      
+      if(password_verify($user->passwordAntigua, $usuarioBaseDeDatos->password)){
+          $nPassword = password_hash($user->passwordNueva, PASSWORD_BCRYPT);
+          $eval = "UPDATE usuario SET password=? WHERE id=?";
+          $peticion = $this->db->prepare($eval);
+          $peticion->execute([$nPassword,IDUSER]);
+          http_response_code(201);
+          exit(json_encode("Usuario actualizado correctamente"));
+      }
+    } else {
+      http_response_code(401);
+      exit(json_encode(["error" => "Fallo de autorizacion"]));         
+    }
+  }
 }

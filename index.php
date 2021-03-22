@@ -68,7 +68,7 @@ switch($control[0]) {
         break;
 
       case "PUT":
-        $controladorUsuarios->editarUser();
+        $controladorUsuarios->editarPassword();
         break;
 
       case "DELETE":
